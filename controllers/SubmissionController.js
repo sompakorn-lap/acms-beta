@@ -1,5 +1,6 @@
 const Submission = require('../models/Submission')
 const Problem = require('../models/Problem')
+const User = require('../models/User')
 
 const updateSubmission = async (req, res) => {
   try {
@@ -42,7 +43,21 @@ const findSubmissions = async (req, res) => {
 const calculateRank = async (req, res) => {
   try {
     const submissions = await Submission.find({ submitted: true })
-    const rank = submissions
+    const users = await User.find({ role: 'examinee' })
+    const usernames = {}
+    for(const user of users){
+      const { userId, username } = user
+      usernames[userId] = username
+    }
+
+    const userScores = {}
+    for(const submission of submissions){
+      const { userId, score, contestId } = submission
+      if(contestId === 'practice'){ continue }
+      if(!userScores[userId]){ userScores[userId] = 0 }
+      userScores[userId] += score.reduce((sum, item) => sum + item)
+    }
+    const rank = Object.entries(userScores).map(([userId, score]) => ({ username: usernames[userId] , score })).sort((a, b) => b.score - a.score)
     res.status(200).json(rank)
   }
   catch (error) { res.status(500).json(error) }

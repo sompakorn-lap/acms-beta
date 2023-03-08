@@ -11,7 +11,9 @@ const login = async (req, res) => {
       return res.status(404).json({ error: 'Something wrong' })
     }
     const { userId, role } = user
-    res.cookie('authToken', { userId, role }, {
+    const auth = { userId, role }
+    const authToken = btoa(JSON.stringify(auth))
+    res.cookie('authToken', authToken, {
       httpOnly: true,
       secure: true,
       sameSite: 'None',
@@ -26,7 +28,7 @@ const refresh = async (req, res) => {
   try {
     const cookies = req.cookies
     if(!cookies?.authToken) return res.status(401).json({ role: '' })
-    const authToken = cookies.authToken
+    const authToken = JSON.parse(atob(cookies.authToken))
     const user = await User.findOne(authToken)
     if(!user){
       return res.status(200).json({ role: '' })

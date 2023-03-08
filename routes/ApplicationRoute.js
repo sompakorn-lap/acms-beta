@@ -8,4 +8,7 @@ router.route('/application/:userId')
 router.route('/application/approve/:userId')
   .put(ApplicationController.approveApplications)
 
+router.route('/application/active/:userId')
+  .post(ApplicationController.activateAccount)
+
 module.exports = router

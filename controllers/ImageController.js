@@ -3,12 +3,18 @@ const crypto = require('crypto')
 
 const createImage = async (req, res) => {
   try {
-    const image = new Image({
-      ...req.body,
-      imageId: crypto.randomUUID()
-    })
-    await image.save()
-    res.status(201).json(image)
+    if(req.body.data === ''){
+      const image = await Image.findOne({ imageId: 'NoImage' })
+      res.status(200).json(image)
+    }
+    else {
+      const image = new Image({
+        ...req.body,
+        imageId: crypto.randomUUID()
+      })
+      await image.save()
+      res.status(201).json(image)
+    }
   }
   catch (error) { res.status(500).json(error) }
 }
