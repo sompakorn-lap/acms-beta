@@ -6,7 +6,7 @@ require('dotenv').config()
 
 const app = express()
 app.use(express.json({ limit: '3mb', extended: true }))
-app.use(cors({ credentials: true }))
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }))
 app.use(cookieParser())
 
 mongoose.set('strictQuery', true)
