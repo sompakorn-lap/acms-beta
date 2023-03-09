@@ -12,7 +12,7 @@ const login = async (req, res) => {
     }
     const { userId, role } = user
     const auth = { userId, role }
-    const authToken = btoa(JSON.stringify(auth))
+    const authToken = (Buffer.from(JSON.stringify(auth))).toString('base64')
     res.cookie('authToken', authToken, {
       httpOnly: true,
       secure: true,
@@ -28,7 +28,7 @@ const refresh = async (req, res) => {
   try {
     const cookies = req.cookies
     if(!cookies?.authToken) return res.status(401).json({ role: '' })
-    const authToken = JSON.parse(atob(cookies.authToken))
+    const authToken = JSON.parse(Buffer.from(cookies.authToken, 'base64').toString())
     const user = await User.findOne(authToken)
     if(!user){
       return res.status(200).json({ role: '' })
