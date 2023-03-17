@@ -17,7 +17,7 @@ const createApplication = async (req, res) => {
       // console.log(order, email)
       const user = await User.findOne(req.params)
       const { username, password } = user
-      await MailSender(email, 'test', `username :${username}\npassword :${password}`)
+      await MailSender(email, 'แจ้งชื่อผู้ใช้งานและรหัสผ่านสำหรับชำระเงิน', `ชื่อผู้ใช้งาน :${username}\nรหัสผ่าน :${password}`)
     }
     
     res.status(201).json(application)
@@ -50,7 +50,7 @@ const activateAccount = async (req, res) => {
     const text = await applications.filter(({ order}) => order != 0).reduce(async (str, { order, name }) => {
       const user = new User({
         userId: crypto.randomUUID(),
-        username: `examinee${users.length.toLocaleString('en-US', { minimumIntegerDigits: 3 })}-${order}`,
+        username: `simsat${users.length.toLocaleString('en-US', { minimumIntegerDigits: 3 })}-${order}`,
         password: Math.random().toString(36).slice(2, 10),
         role: (order === 1) ? 'examinee' : 'spectator',
         active: true,
@@ -59,10 +59,10 @@ const activateAccount = async (req, res) => {
       await user.save()
 
       const { username, password } = user
-      return (await str) + `สำหรับ ${name}\nusername :${username}\npassword :${password}\n`
+      return (await str) + `สำหรับ ${name}\nชื่อผู้ใช้งาน :${username}\nรหัสผ่าน :${password}\n`
     }, '')
     // console.log(text, leader[0].email)
-    await MailSender(leader[0].email, 'test', text)
+    await MailSender(leader[0].email, 'แจ้งชื่อผู้ใช้งานและรหัสผ่านสำหรับเข้าสอบ', text)
   }
   catch (error) { res.status(500).json(error) }
 }
