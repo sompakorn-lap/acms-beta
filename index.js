@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 require('dotenv').config()
 
 const app = express()
-app.use(express.json({ limit: '3mb', extended: true }))
+app.use(express.json({ limit: '7mb', extended: true }))
 app.use(cors({ credentials: true, origin: process.env.ORIGIN }))
 app.use(cookieParser())
 
