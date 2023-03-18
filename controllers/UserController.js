@@ -3,12 +3,11 @@ const crypto = require('crypto')
 
 const createUser = async (req, res) => {
   try {
-    const { role } = req.body
-    const users = await User.find(req.body)
+    const { username, role } = req.body
 
     const user = new User({
       userId: crypto.randomUUID(),
-      username: `${role}${users.length.toLocaleString('en-US', { minimumIntegerDigits: 3 })}`,
+      username: username,
       password: Math.random().toString(36).slice(2, 10),
       role: role,
       active: true,

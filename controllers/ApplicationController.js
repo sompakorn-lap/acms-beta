@@ -14,7 +14,6 @@ const createApplication = async (req, res) => {
 
     const { order, email } = req.body
     if(order === 0){
-      // console.log(order, email)
       const user = await User.findOne(req.params)
       const { username, password } = user
       await MailSender(email, 'แจ้งชื่อผู้ใช้งานและรหัสผ่านสำหรับชำระเงิน', `ชื่อผู้ใช้งาน :${username}\nรหัสผ่าน :${password}`)
@@ -61,7 +60,6 @@ const activateAccount = async (req, res) => {
       const { username, password } = user
       return (await str) + `สำหรับ ${name}\nชื่อผู้ใช้งาน :${username}\nรหัสผ่าน :${password}\n`
     }, '')
-    // console.log(text, leader[0].email)
     await MailSender(leader[0].email, 'แจ้งชื่อผู้ใช้งานและรหัสผ่านสำหรับเข้าสอบ', text)
   }
   catch (error) { res.status(500).json(error) }
