@@ -42,7 +42,7 @@ const refresh = async (req, res) => {
 const logout = async (req, res) => {
   try {
     const user = await User.findOneAndUpdate({
-      ...req.body,
+      ...req.cookies,
       active: true,
       online: true
     }, { online: false }, { new: true })
