@@ -41,8 +41,11 @@ const refresh = async (req, res) => {
 
 const logout = async (req, res) => {
   try {
+    const cookies = req.cookies
+    if(!cookies?.authToken) return res.status(404).json({ error: 'Something wrong' })
+    const authToken = JSON.parse(Buffer.from(cookies.authToken, 'base64').toString())
     const user = await User.findOneAndUpdate({
-      ...req.cookies,
+      ...authToken,
       active: true,
       online: true
     }, { online: false }, { new: true })
