@@ -44,11 +44,13 @@ const logout = async (req, res) => {
     const cookies = req.cookies
     if(!cookies?.authToken) return res.status(404).json({ error: 'Something wrong' })
     const authToken = JSON.parse(Buffer.from(cookies.authToken, 'base64').toString())
+    // console.log(authToken)
     const user = await User.findOneAndUpdate({
       ...authToken,
       active: true,
       online: true
     }, { online: false }, { new: true })
+    // console.log(user)
     if(!user){
       return res.status(404).json({ error: 'Something wrong' })
     }

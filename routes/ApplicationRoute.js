@@ -4,6 +4,7 @@ const ApplicationController = require('../controllers/ApplicationController')
 router.route('/application/:userId')
   .get(ApplicationController.findApplications)
   .post(ApplicationController.createApplication)
+  .delete(ApplicationController.deleteApplications)
 
 router.route('/application/approve/:userId')
   .put(ApplicationController.approveApplications)

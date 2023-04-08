@@ -1,5 +1,6 @@
 const Application = require('../models/Application')
 const User = require('../models/User')
+const Image = require('../models/Image')
 const MailSender = require('../utils/MailSender')
 const crypto = require('crypto')
 
@@ -40,6 +41,27 @@ const approveApplications = async (req, res) => {
   catch (error) { res.status(500).json(error) }
 }
 
+const deleteApplications = async (req, res) => {
+  try {
+    const applications = await Application.find(req.params)
+    for(const application of applications){
+      const { transcriptionImageId, identityCardImageId } = application
+      if(transcriptionImageId !== 'NoImage'){
+        const image = await Image.findOneAndDelete({ imageId: transcriptionImageId })
+        // console.log(transcriptionImageId, 'is deleted')
+      }
+      if(identityCardImageId !== 'NoImage'){
+        const image = await Image.findOneAndDelete({ imageId: identityCardImageId })
+        // console.log(identityCardImageId, 'is deleted')
+      }
+    }
+    await Application.deleteMany(req.params)
+    await User.findOneAndDelete(req.params)
+    res.status(200).json('applications are deleted')
+  }
+  catch (error) { res.status(500).json(error) }
+}
+
 const activateAccount = async (req, res) => {
   try {
     const applications = await Application.find(req.params)
@@ -68,6 +90,7 @@ const activateAccount = async (req, res) => {
 module.exports = {
   createApplication,
   findApplications,
+  deleteApplications,
   approveApplications,
   activateAccount
 }
