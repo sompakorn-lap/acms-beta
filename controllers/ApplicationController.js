@@ -63,6 +63,7 @@ const deleteApplications = async (req, res) => {
 }
 
 const activateAccount = async (req, res) => {
+  // console.log('test')
   try {
     const applications = await Application.find(req.params)
     const users = await User.find({ role: 'examinee' })
@@ -82,7 +83,8 @@ const activateAccount = async (req, res) => {
       const { username, password } = user
       return (await str) + `สำหรับ ${name}\nชื่อผู้ใช้งาน :${username}\nรหัสผ่าน :${password}\n`
     }, '')
-    await MailSender(leader[0].email, 'แจ้งชื่อผู้ใช้งานและรหัสผ่านสำหรับเข้าสอบ', text)
+    res.send(text)
+    // await MailSender(leader[0].email, 'แจ้งชื่อผู้ใช้งานและรหัสผ่านสำหรับเข้าสอบ', text)
   }
   catch (error) { res.status(500).json(error) }
 }
