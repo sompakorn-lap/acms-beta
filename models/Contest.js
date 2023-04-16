@@ -5,8 +5,7 @@ const ContestSchema = Schema({
   contestId: String,
   contestTitle: String,
   description: String,
-  startTime: Date,
-  endTime: Date
+  link: String,
 })
 
 const Contest = mongoose.model('contest', ContestSchema)

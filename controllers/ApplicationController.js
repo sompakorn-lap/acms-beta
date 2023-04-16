@@ -83,8 +83,8 @@ const activateAccount = async (req, res) => {
       const { username, password } = user
       return (await str) + `สำหรับ ${name}\nชื่อผู้ใช้งาน :${username}\nรหัสผ่าน :${password}\n`
     }, '')
-//     res.send(text)
-    await MailSender(leader[0].email, 'แจ้งชื่อผู้ใช้งานและรหัสผ่านสำหรับเข้าสอบ', text)
+    res.send(text)
+    // await MailSender(leader[0].email, 'แจ้งชื่อผู้ใช้งานและรหัสผ่านสำหรับเข้าสอบ', text)
   }
   catch (error) { res.status(500).json(error) }
 }
